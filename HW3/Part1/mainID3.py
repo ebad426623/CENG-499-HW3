@@ -1,4 +1,4 @@
-from Part1.ID3 import DecisionTree
+from ID3 import DecisionTree
 
 # Features for animals
 # All features are discrete
