@@ -30,7 +30,7 @@ class DecisionTree:
         # further variables and functions can be added...
 
 
-    def calculate_entropy__(self, dataset, labels):
+    def calculate_entropy__(self, dataset, labels =  0):
         """
         :param dataset: array of the data instances
         :param labels: array of the labels of the data instances
@@ -41,6 +41,10 @@ class DecisionTree:
         """
         Entropy calculations
         """
+
+        _, counts =  np.unique(dataset, return_counts = True)
+        probabilities = counts/16
+        entropy_value = -np.sum(probabilities*np.log2(probabilities))
 
         return entropy_value
 
@@ -116,7 +120,9 @@ class DecisionTree:
         """
             Your implementation
         """
-
+        
+        
+        
         return predicted_label
 
     def train(self):

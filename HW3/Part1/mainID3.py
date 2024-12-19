@@ -130,12 +130,16 @@ dataset = [
 [0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
 [0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 2, 1, 0, 0]]
 
+
+
 # criterion = "gain ratio" or "information gain"
 dt = DecisionTree(dataset, labels, features, criterion="gain ratio")
 dt.train()
 correct = 0
 wrong = 0
-for data_index in range(len(dataset)):
+
+
+for data_index in range(1): #range(len(dataset)):
     data_point = dataset[data_index]
     data_label = labels[data_index]
 
