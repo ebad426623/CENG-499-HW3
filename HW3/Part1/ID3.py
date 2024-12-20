@@ -30,7 +30,7 @@ class DecisionTree:
         # further variables and functions can be added...
 
 
-    def calculate_entropy__(self, dataset, labels):
+    def calculate_entropy__(self, labels):
         """
         :param dataset: array of the data instances
         :param labels: array of the labels of the data instances
@@ -41,19 +41,10 @@ class DecisionTree:
         """
         Entropy calculations
         """
-        # for di in dataset:
-        #     print(di)
-        #     print()
-
-        # print("Label")
-        # print(labels)
-
-
         _, counts = np.unique(labels, return_counts=True)
-        #print(counts)
         probabilities = counts / len(labels)
         entropy_value = -np.sum(probabilities * np.log2(probabilities))
-        #print(entropy_value)
+        
         return entropy_value
 
     def calculate_average_entropy__(self, dataset, labels, attribute):
@@ -67,8 +58,24 @@ class DecisionTree:
         """
             Average entropy calculations
         """
+        
+        new_dataset = [d[attribute] for d in dataset]
 
+        unique_attributes, unique_attributes_counts = np.unique([d[attribute] for d in dataset], return_counts=True)
+        total_labels = len(labels)
 
+        index = 0
+        loop_size = len(unique_attributes)
+
+        # Looping through each unique attribute
+        while (index < loop_size):
+            attribute_indices = [i for i in range(len(new_dataset)) if new_dataset[i] == unique_attributes[index]] 
+            sub_labels = [labels[i] for i in attribute_indices]
+
+            ul, ulc = np.unique(sub_labels, return_counts=True)
+
+            average_entropy += (unique_attributes_counts[index] / total_labels) * self.calculate_entropy__(sub_labels)
+            index += 1
 
         return average_entropy
 
@@ -135,7 +142,7 @@ class DecisionTree:
         d = self.dataset[0: 5]
         l = self.labels[0: 5]
         
-        self.calculate_entropy__(d, l)
+        self.calculate_average_entropy__(self.dataset, self.labels, 12)
 
 
         return predicted_label
