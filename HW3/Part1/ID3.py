@@ -218,12 +218,26 @@ class DecisionTree:
         
         If a leaf node contains multiple labels in it, the majority label should be returned as the predicted label
         """
-        predicted_label = None
+        # No need to use this
+        # predicted_label = None 
         """
             Your implementation
         """
         
-        return predicted_label
+        curr_node = self.root
+
+
+        while(isinstance(curr_node, TreeNode)):
+            curr_attribute_index = self.features.index(curr_node.attribute)
+
+            if x[curr_attribute_index] in curr_node.subtrees:
+                curr_node = curr_node.subtrees[x[curr_attribute_index]]
+            else:
+                return None
+
+        
+
+        return curr_node.labels
 
     def train(self):
         self.root = self.ID3__(self.dataset, self.labels, [])
