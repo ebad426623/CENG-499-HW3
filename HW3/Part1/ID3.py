@@ -144,7 +144,7 @@ class DecisionTree:
     def ID3__(self, dataset, labels, used_attributes):
         """
         Recursive function for ID3 algorithm
-        :param dataset: data instances falling under the current  tree node
+        :param dataset: data instances falling under the current tree node
         :param labels: labels of those instances
         :param used_attributes: while recursively constructing the tree, already used labels should be stored in used_attributes
         :return: it returns a created non-leaf node or a created leaf node
@@ -152,8 +152,18 @@ class DecisionTree:
         """
             Your implementation
         """
-    
-    
+        print("hi")
+
+        if(len(np.unique(labels)) == 1):
+            print("xd")
+            return TreeLeafNode(dataset, labels[0])
+
+        if len(used_attributes) == len(self.features):
+            print("xD")
+            unique_labels, unique_labels_counts = np.unique(labels, return_counts=True)
+            index_of_max = np.argmax(unique_labels_counts)
+            print(unique_labels, unique_labels_counts)
+            return TreeLeafNode(dataset, unique_labels[index_of_max])
     
     def predict(self, x):
         """
@@ -168,12 +178,14 @@ class DecisionTree:
         """
         
         # For debugging purpose
-        d = self.dataset[0: 5]
-        l = self.labels[0: 5]
-        
-        gain = self.calculate_gain_ratio__(self.dataset, self.labels, 12)
-        print(gain)
+        d = self.dataset
+        l = self.labels
 
+        used_attributes = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
+        
+        
+        node = self.ID3__(d, l, used_attributes)
+        print(node.labels)
         return predicted_label
 
     def train(self):
