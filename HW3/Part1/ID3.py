@@ -90,6 +90,9 @@ class DecisionTree:
         """
             Information gain calculations
         """
+
+        information_gain = self.calculate_entropy__(labels) - self.calculate_average_entropy__(dataset, labels, attribute)
+        print(information_gain)
         return information_gain
 
     def calculate_intrinsic_information__(self, dataset, labels, attribute):
@@ -139,10 +142,11 @@ class DecisionTree:
             Your implementation
         """
         
+        # For debugging purpose
         d = self.dataset[0: 5]
         l = self.labels[0: 5]
         
-        self.calculate_average_entropy__(self.dataset, self.labels, 12)
+        self.calculate_information_gain__(self.dataset, self.labels, 12)
 
 
         return predicted_label
