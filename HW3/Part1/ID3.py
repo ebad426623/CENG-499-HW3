@@ -164,7 +164,7 @@ class DecisionTree:
             return TreeLeafNode(dataset, unique_labels[index_of_max])
         
 
-
+        
         # Finding the best attribute
         
         score = []
@@ -173,18 +173,43 @@ class DecisionTree:
         for attribute in range(total_attributes):
             if attribute not in used_attributes:
                 if self.criterion == "information gain":
-                    score.append(float(self.calculate_information_gain__(dataset, labels, attribute)))
-                else: 
-                    score.append(float(self.calculate_gain_ratio__(dataset, labels, attribute)))
+                    score += [float(self.calculate_information_gain__(dataset, labels, attribute))]
+                elif self.criterion == "gain ratio": 
+                    score += [float(self.calculate_gain_ratio__(dataset, labels, attribute))]
+
 
         best_attribute = np.argmax(score)
 
-        # Marking best attribute
-        used_attributes.append(int(best_attribute))
+        # Marking best attribute and creating a node
+        used_attributes += [int(best_attribute)]
+        node = TreeNode(self.features[best_attribute])
 
         # Making branches
-        unique_attributes, unique_attributes_counts = np.unique([d[attribute] for d in dataset], return_counts=True)
+        unique_attributes, _ = np.unique([d[attribute] for d in dataset], return_counts=True)
 
+        index = 0
+        loop_size = len(unique_attributes)
+
+        while(index < loop_size):
+            attribute_indices = [i for i in range(len(dataset)) if dataset[i][attribute] == unique_attributes[index]] 
+            sub_data = [dataset[i] for i in attribute_indices]
+            sub_labels = [labels[i] for i in attribute_indices]
+
+            
+            if len(sub_data):
+                node.subtrees[unique_attributes[index]] = self.ID3__(sub_data, sub_labels, used_attributes)
+
+
+            # If there is not sub data
+            # Make a node with majority label
+            else:
+                unique_labels, unique_labels_counts = np.unique(labels, return_counts=True)
+                index_of_max = np.argmax(unique_labels_counts)
+                return TreeLeafNode(dataset, unique_labels[index_of_max])
+            
+            index += 1 
+
+        return node
 
     def predict(self, x):
         """
@@ -198,14 +223,6 @@ class DecisionTree:
             Your implementation
         """
         
-        # For debugging purpose
-        d = self.dataset
-        l = self.labels
-
-        used_attributes = []
-        
-        
-        self.ID3__(d, l, used_attributes)
         return predicted_label
 
     def train(self):
