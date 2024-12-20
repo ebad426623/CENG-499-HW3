@@ -72,8 +72,6 @@ class DecisionTree:
             attribute_indices = [i for i in range(len(new_dataset)) if new_dataset[i] == unique_attributes[index]] 
             sub_labels = [labels[i] for i in attribute_indices]
 
-            ul, ulc = np.unique(sub_labels, return_counts=True)
-
             average_entropy += (unique_attributes_counts[index] / total_labels) * self.calculate_entropy__(sub_labels)
             index += 1
 
@@ -92,7 +90,6 @@ class DecisionTree:
         """
 
         information_gain = self.calculate_entropy__(labels) - self.calculate_average_entropy__(dataset, labels, attribute)
-        print(information_gain)
         return information_gain
 
     def calculate_intrinsic_information__(self, dataset, labels, attribute):
@@ -102,11 +99,27 @@ class DecisionTree:
         :param attribute: for which attribute the intrinsic information score is going to be calculated...
         :return: the calculated intrinsic information score
         """
-        intrinsic_info = None
+        intrinsic_info = 0.0
         """
             Intrinsic information calculations for a given attribute
         """
+
+        total_data_instance = len(dataset)
+        unique_attributes, unique_attributes_counts = np.unique([d[attribute] for d in dataset], return_counts=True)
+
+        index = 0
+        loop_size = len(unique_attributes)
+
+        # Looping through each unique attribute
+        while (index < loop_size):
+            probablity = unique_attributes_counts[index] / total_data_instance
+            if(probablity):
+                intrinsic_info -= probablity * np.log2(probablity)
+            index += 1
+
         return intrinsic_info
+    
+
     def calculate_gain_ratio__(self, dataset, labels, attribute):
         """
         :param dataset: array of data instances with which a gain ratio is going to be calculated
@@ -117,6 +130,15 @@ class DecisionTree:
         """
             Your implementation
         """
+
+        gain_ratio = 0
+        information_gain = self.calculate_information_gain__(dataset, labels, attribute)
+        intrinsic_info = self.calculate_intrinsic_information__(dataset, labels, attribute)
+
+        if(intrinsic_info):
+            gain_ratio = information_gain / intrinsic_info
+
+        return gain_ratio
 
 
     def ID3__(self, dataset, labels, used_attributes):
@@ -146,8 +168,8 @@ class DecisionTree:
         d = self.dataset[0: 5]
         l = self.labels[0: 5]
         
-        self.calculate_information_gain__(self.dataset, self.labels, 12)
-
+        gain = self.calculate_gain_ratio__(self.dataset, self.labels, 12)
+        print(gain)
 
         return predicted_label
 
