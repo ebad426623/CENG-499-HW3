@@ -30,7 +30,7 @@ class DecisionTree:
         # further variables and functions can be added...
 
 
-    def calculate_entropy__(self, dataset, labels =  0):
+    def calculate_entropy__(self, dataset, labels):
         """
         :param dataset: array of the data instances
         :param labels: array of the labels of the data instances
@@ -41,11 +41,19 @@ class DecisionTree:
         """
         Entropy calculations
         """
+        # for di in dataset:
+        #     print(di)
+        #     print()
 
-        _, counts =  np.unique(dataset, return_counts = True)
-        probabilities = counts/16
-        entropy_value = -np.sum(probabilities*np.log2(probabilities))
+        # print("Label")
+        # print(labels)
 
+
+        _, counts = np.unique(labels, return_counts=True)
+        #print(counts)
+        probabilities = counts / len(labels)
+        entropy_value = -np.sum(probabilities * np.log2(probabilities))
+        #print(entropy_value)
         return entropy_value
 
     def calculate_average_entropy__(self, dataset, labels, attribute):
@@ -59,6 +67,9 @@ class DecisionTree:
         """
             Average entropy calculations
         """
+
+
+
         return average_entropy
 
     def calculate_information_gain__(self, dataset, labels, attribute):
@@ -121,8 +132,12 @@ class DecisionTree:
             Your implementation
         """
         
+        d = self.dataset[0: 5]
+        l = self.labels[0: 5]
         
-        
+        self.calculate_entropy__(d, l)
+
+
         return predicted_label
 
     def train(self):
