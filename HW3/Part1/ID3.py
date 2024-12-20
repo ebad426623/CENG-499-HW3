@@ -152,19 +152,40 @@ class DecisionTree:
         """
             Your implementation
         """
-        print("hi")
-
+        
+        # If only one class
         if(len(np.unique(labels)) == 1):
-            print("xd")
             return TreeLeafNode(dataset, labels[0])
 
+        # If all the features have been used
         if len(used_attributes) == len(self.features):
-            print("xD")
             unique_labels, unique_labels_counts = np.unique(labels, return_counts=True)
             index_of_max = np.argmax(unique_labels_counts)
-            print(unique_labels, unique_labels_counts)
             return TreeLeafNode(dataset, unique_labels[index_of_max])
-    
+        
+
+
+        # Finding the best attribute
+        
+        score = []
+        total_attributes = len(self.features)
+
+        for attribute in range(total_attributes):
+            if attribute not in used_attributes:
+                if self.criterion == "information gain":
+                    score.append(float(self.calculate_information_gain__(dataset, labels, attribute)))
+                else: 
+                    score.append(float(self.calculate_gain_ratio__(dataset, labels, attribute)))
+
+        best_attribute = np.argmax(score)
+
+        # Marking best attribute
+        used_attributes.append(int(best_attribute))
+
+        # Making branches
+        unique_attributes, unique_attributes_counts = np.unique([d[attribute] for d in dataset], return_counts=True)
+
+
     def predict(self, x):
         """
         :param x: a data instance, 1 dimensional Python array 
@@ -181,11 +202,10 @@ class DecisionTree:
         d = self.dataset
         l = self.labels
 
-        used_attributes = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
+        used_attributes = []
         
         
-        node = self.ID3__(d, l, used_attributes)
-        print(node.labels)
+        self.ID3__(d, l, used_attributes)
         return predicted_label
 
     def train(self):
