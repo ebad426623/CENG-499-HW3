@@ -166,32 +166,33 @@ class DecisionTree:
 
         
         # Finding the best attribute
-        
-        score = []
-        total_attributes = len(self.features)
+        scores = [-np.inf] * len(self.features)
 
-        for attribute in range(total_attributes):
+
+        for attribute in range(len(self.features)):
             if attribute not in used_attributes:
                 if self.criterion == "information gain":
-                    score += [float(self.calculate_information_gain__(dataset, labels, attribute))]
-                elif self.criterion == "gain ratio": 
-                    score += [float(self.calculate_gain_ratio__(dataset, labels, attribute))]
+                    scores[attribute] = self.calculate_information_gain__(dataset, labels, attribute)
+                elif self.criterion == "gain ratio":
+                    scores[attribute] = self.calculate_gain_ratio__(dataset, labels, attribute)
 
+        
+        # Find the best attribute
+        best_attribute = np.argmax(scores)
 
-        best_attribute = np.argmax(score)
 
         # Marking best attribute and creating a node
         used_attributes += [int(best_attribute)]
         node = TreeNode(self.features[best_attribute])
 
         # Making branches
-        unique_attributes, _ = np.unique([d[attribute] for d in dataset], return_counts=True)
+        unique_attributes, _ = np.unique([d[best_attribute] for d in dataset], return_counts=True)
 
         index = 0
         loop_size = len(unique_attributes)
 
         while(index < loop_size):
-            attribute_indices = [i for i in range(len(dataset)) if dataset[i][attribute] == unique_attributes[index]] 
+            attribute_indices = [i for i in range(len(dataset)) if dataset[i][best_attribute] == unique_attributes[index]] 
             sub_data = [dataset[i] for i in attribute_indices]
             sub_labels = [labels[i] for i in attribute_indices]
 
@@ -205,7 +206,7 @@ class DecisionTree:
             else:
                 unique_labels, unique_labels_counts = np.unique(labels, return_counts=True)
                 index_of_max = np.argmax(unique_labels_counts)
-                return TreeLeafNode(dataset, unique_labels[index_of_max])
+                node.subtrees[unique_attributes[index]] = TreeLeafNode(dataset, unique_labels[index_of_max])
             
             index += 1 
 
