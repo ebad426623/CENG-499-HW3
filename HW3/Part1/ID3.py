@@ -196,18 +196,7 @@ class DecisionTree:
             sub_data = [dataset[i] for i in attribute_indices]
             sub_labels = [labels[i] for i in attribute_indices]
 
-            
-            if len(sub_data):
-                node.subtrees[unique_attributes[index]] = self.ID3__(sub_data, sub_labels, used_attributes)
-
-
-            # If there is not sub data
-            # Make a node with majority label
-            else:
-                unique_labels, unique_labels_counts = np.unique(labels, return_counts=True)
-                index_of_max = np.argmax(unique_labels_counts)
-                node.subtrees[unique_attributes[index]] = TreeLeafNode(dataset, unique_labels[index_of_max])
-            
+            node.subtrees[unique_attributes[index]] = self.ID3__(sub_data, sub_labels, used_attributes)
             index += 1 
 
         return node
