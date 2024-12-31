@@ -134,11 +134,11 @@ dataset = [
 
 
 # criterion = "gain ratio" or "information gain"
+print("Using Gain Ratio:\n")
 dt = DecisionTree(dataset, labels, features, criterion="gain ratio")
 dt.train()
 correct = 0
 wrong = 0
-
 
 for data_index in range(len(dataset)):
     data_point = dataset[data_index]

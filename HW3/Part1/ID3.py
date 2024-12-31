@@ -199,6 +199,8 @@ class DecisionTree:
             node.subtrees[unique_attributes[index]] = self.ID3__(sub_data, sub_labels, used_attributes)
             index += 1 
 
+        print(self.features[best_attribute])
+
         return node
 
     def predict(self, x):
