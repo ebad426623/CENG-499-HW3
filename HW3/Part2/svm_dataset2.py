@@ -18,7 +18,7 @@ param_grid = {
 cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=5, random_state=42)
 
 
-grid = GridSearchCV(
+grid_search = GridSearchCV(
     estimator=estimator,
     param_grid=param_grid,
     scoring="accuracy",
@@ -26,8 +26,8 @@ grid = GridSearchCV(
     n_jobs=-1
 )
 
-grid.fit(dataset, labels)
-results = grid.cv_results_
+grid_search.fit(dataset, labels)
+results = grid_search.cv_results_
 
 final = []
 for i, mean in enumerate(results["mean_test_score"]):
@@ -53,7 +53,7 @@ for params, mean, interval in final:
         best_C = C
         best_interval = interval
 
-    print(f"Configuration {index}:  [Kernel: {kernel}, C: {C}], Accuracy: {(mean*100):.2f} {u"\u00B1"} {(interval*100):.4f}")
+    print(f"Configuration {index}: [Kernel: {kernel}, C: {C}], Accuracy: {(mean*100):.2f} {u"\u00B1"} {(interval*100):.4f}")
     index += 1
 
 print()
