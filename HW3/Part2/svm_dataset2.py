@@ -33,7 +33,7 @@ final = []
 for i, mean in enumerate(results["mean_test_score"]):
     std = results["std_test_score"][i]
     params = results["params"][i]
-    interval = 1.96 * std / cv.get_n_splits()
+    interval = 1.96 * std / np.sqrt(cv.get_n_splits())
     final.append((params, mean, interval))
 
 

@@ -19,9 +19,9 @@ classifiers = {
     "KNN": (KNeighborsClassifier(), {"model__n_neighbors": [3, 7], "model__weights": ["uniform", "distance"], "model__metric": ["euclidean", "manhattan"]}),
     "SVM": (SVC(), {"model__C": [1, 10], "model__kernel": ["poly", "rbf"]}),
     "Decision Tree": (DecisionTreeClassifier(), {"model__criterion": ["entropy", "gini"], "model__max_depth": [10, 50]}),
-    "Random Forest": (RandomForestClassifier(), {"model__n_estimators": [100], "model__criterion": ["entropy", "gini"]}),
-    "MLP": (MLPClassifier(), {"model__hidden_layer_sizes": [(20,), (50,)], "model__activation": ["relu", "tanh"], "model__learning_rate_init": [0.1, 1]}),
-    "Gradient Boosting": (GradientBoostingClassifier(), {"model__loss": ["log_loss", "exponential"], "model__learning_rate": [0.05, 0.1]})
+    "Random Forest": (RandomForestClassifier(), {"model__n_estimators": [50, 100], "model__criterion": ["entropy", "gini"]}),
+    "MLP": (MLPClassifier(), {"model__hidden_layer_sizes": [(30,)], "model__activation": ["relu", "tanh"], "model__learning_rate_init": [0.1, 1]}),
+    "Gradient Boosting": (GradientBoostingClassifier(), {"model__n_estimators": [50], "model__loss": ["log_loss"], "model__learning_rate": [0.05, 0.1]})
 }
 
 
